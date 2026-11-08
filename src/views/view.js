@@ -9,7 +9,6 @@ function layout(title, content) {
       <body>
         <nav>
           <a href="/">Inicio</a>
-          <a href="/line?=Lilás">Linha Lilás</a>
           <a href="/map">Mapa</a>
           <a href="/perfil">Perfil</a>
           <a href="/Useful&amp;Questions">Perguntas frequentes</a>
@@ -29,16 +28,14 @@ function layout(title, content) {
   `;
 }
 
-export function allLines() {
-  return layout('Linhas', '<h1>Linhas</h1>');
-}
-
 export function homePage() {
   return layout('Home', '<h1>Welcome to the store</h1>');
 }
 
-export function linePage() {
-  return layout('Linha Lilás', '<h1>Linha Lilás</h1>');
+export function linePage(line) {
+  return layout(`Linha ${line.line}`, `
+    <h1 style="color: ${line.color}">Bem-vindo à linha ${line.lineNumber} ${line.line}</h1>
+  `);
 }
 
 export function mapPage() {
@@ -73,8 +70,19 @@ export function alertsPage() {
   return layout('Alertas', '<h1>Alertas</h1>');
 }
 
-export function linesPage() {
-  return layout('Linhas', '<h1>Linhas</h1>');
+export function linesPage(list) {
+  const items = list
+    .map((item) => `<li><a href="/line?number=${item.lineNumber}">${item.line}</a></li>`)
+    .join('');
+
+  return layout('Linhas', `
+    <h1>Linhas</h1>
+    <form action="/lines/search" method="GET">
+      <input type="text" name="term" placeholder="Buscar linha...">
+      <button type="submit">Buscar</button>
+    </form>
+    <ul>${items}</ul>
+  `);
 }
 
 export function registerPage() {

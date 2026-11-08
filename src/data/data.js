@@ -10,17 +10,17 @@ const lines = [
   { line: 'esmeralda', lineNumber: 9, color: '#00A398' },
   { line: 'turquesa', lineNumber: 10, color: '#007C8F' },
   { line: 'coral', lineNumber: 11, color: '#FF5C00' },
-  {line: 'safira', lineNumber: 12, color: '#005AA9' },
-  {line: 'jade', lineNumber: 13, color: '#00A398' },
+  { line: 'safira', lineNumber: 12, color: '#005AA9' },
+  { line: 'jade', lineNumber: 13, color: '#00A398' },
   { line: 'prata', lineNumber: 15, color: '#9F9F94' },
   { line: 'ouro', lineNumber: 17, color: '#928058' },
 ];
 
 export function getLines() {
-    return lines;
-  }
+  return lines;
+}
 
-  export function searchLines(param) {
+export function searchLines(param) {
   if (!param) {
     return [];
   }
@@ -30,3 +30,6 @@ export function getLines() {
   return lines.filter((item) => item.line.toLowerCase().includes(lowerParam));
 }
 
+export function getLineByNumber(number) {
+  return lines.find((item) => item.lineNumber === number);
+}
