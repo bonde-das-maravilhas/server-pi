@@ -15,6 +15,7 @@ import {
   registerPage,
   termsPage,
 } from '../views/view.js';
+import { searchLines } from '../data/data.js';
 
 export function route(request, response) {
   const url = new URL(request.url, `http://${request.headers.host}`);
@@ -26,25 +27,27 @@ if (url.pathname === '/') {
   return;
 }
 
+/*perguntar pro correa*/
+
+/*como linkar a busca com as paginas e seus parametros, e como fazer a busca funcionar com o parametro que vem da pagina de busca*/
+
+
 /*perguntar pro correa acaba aqui*/
-
-
-/*termo e busca o negocio pra usar no search que busca os itens*/
-/*R: APOSTILA 4,5*/
-if (url.pathname === '/lines/param') {
-
-  if (url.searchParams.has('param')) {
-    const param = url.searchParams.get('param');
+/*linhas do busca*/
+if (url.pathname === '/lines/search') {
+  const term = url.searchParams.get('term');
+  const results = searchLines(term);
+  
   response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-  response.end(linePage());
-  return;
+const items = results
+  .map((item) => `<li><a href="/line/${item.line}">${item.line}</a></li>`)
+  .join('');
+response.end(`
+  <h1>Resultados da busca para "${term}"</h1>
+  <ul>${items}</ul>
+`);
+return;
 }
-
-
-/*perguntar pro correa acaba aqui*/
-
-
-
 
 /*tudo quem tem no footer */
 
@@ -145,4 +148,4 @@ if (request.method === 'GET' && path === '/admin') {
 response.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
 response.end(notFoundPage());
 }
-}
+

@@ -29,6 +29,10 @@ function layout(title, content) {
   `;
 }
 
+export function allLines() {
+  return layout('Linhas', '<h1>Linhas</h1>');
+}
+
 export function homePage() {
   return layout('Home', '<h1>Welcome to the store</h1>');
 }
