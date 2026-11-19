@@ -1,0 +1,57 @@
+body {
+            background-image: linear-gradient(rgba(244, 249, 255, 0.5), rgba(244, 249, 255, 0.5)),
+                url('../assets/images/background.png');
+            background-size: 1500px;
+            background-repeat: no-repeat;
+            padding-bottom: 0;
+            background-position: left bottom;
+
+        }
+
+        .not-found {
+            display: flex;
+            flex-direction: column;
+            padding: 40px 0 40px 80px;
+            align-items: center;
+            padding-bottom: 0;
+            
+
+        }
+
+        .not-found-image {
+            display: flex;
+            width: 900px;
+            height: auto;
+            margin-bottom: 140px;
+            margin-right: 250px;
+        }
+
+        .train-image {
+            transform: translateY(200px);
+            width: 600px;
+            height: 500px;
+            object-fit: cover;
+            object-position: left;
+        }
+
+        .not-found-title {
+            color: #004e98;
+            font-size: 64px;
+            font-weight: 800;
+            margin-bottom: 40px;
+            margin-right: auto;
+        }
+
+        .group-notfound {
+            display: flex;
+            
+            align-items: center;
+        }
+
+        .emerald-line {
+            width: 600px;
+            height: auto;
+            display: flex;
+            margin-right: auto;
+
+        }

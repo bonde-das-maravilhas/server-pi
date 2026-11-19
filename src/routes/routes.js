@@ -3,6 +3,7 @@ import {
   adminPage,
   alertsPage,
   communityPage,
+  commentPage,
   faqPage,
   homePage,
   linePage,
@@ -16,10 +17,52 @@ import {
   termsPage,
 } from '../views/view.js';
 import { searchLines, getLineByNumber, getLines } from '../data/data.js';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-export function route(request, response) {
+const srcRoot = path.resolve(fileURLToPath(new URL('../', import.meta.url)));
+
+const mimeTypes = {
+  '.css': 'text/css; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+};
+
+async function serveStatic(pathname, response, requestMethod) {
+  if (!pathname.startsWith('/src/') && !pathname.startsWith('/script/')) {
+    return false;
+  }
+
+  const relativePath = decodeURIComponent(pathname).replace(/^\/src\//, '').replace(/^\/script\//, 'script/');
+  const filePath = path.resolve(srcRoot, relativePath);
+
+  if (filePath !== srcRoot && !filePath.startsWith(srcRoot + path.sep)) {
+    return false;
+  }
+
+  try {
+    const content = await readFile(filePath);
+    response.writeHead(200, {
+      'Content-Type': mimeTypes[path.extname(filePath).toLowerCase()] || 'application/octet-stream',
+    });
+    response.end(requestMethod === 'HEAD' ? undefined : content);
+  } catch {
+    response.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+    response.end('Arquivo nao encontrado');
+  }
+
+  return true;
+}
+
+export async function route(request, response) {
   const url = new URL(request.url, `http://${request.headers.host}`);
   const path = url.pathname;
+
+  if ((request.method === 'GET' || request.method === 'HEAD') && await serveStatic(path, response, request.method)) {
+    return;
+  }
 
   /*Land page pagina inicial a gente decide depois*/
   if (url.pathname === '/') {
@@ -63,10 +106,10 @@ export function route(request, response) {
   /*tudo quem tem no footer */
 
 
-  /*MAPA*/
-  if (url.pathname === '/map') {
+  /*COMENTARIOS*/
+  if (url.pathname === '/comentarios') {
     response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-    response.end(mapPage());
+    response.end(commentPage());
     return;
   }
 
@@ -109,6 +152,13 @@ export function route(request, response) {
   if (url.pathname === '/community') {
     response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
     response.end(communityPage());
+    return;
+  }
+
+  /*mapa*/
+  if (url.pathname === '/map') {
+    response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    response.end(mapPage());
     return;
   }
 
